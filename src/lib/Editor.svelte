@@ -10,9 +10,20 @@
     editor = new Editor({
       element: element,
       extensions: [StarterKit],
-      content: "",
+      content: `
+            <h2>
+              Hi there 👋
+            </h2>
+          `,
       onTransaction: () => {
         editor = editor;
+      },
+
+      editorProps: {
+        attributes: {
+          class:
+            "prose prose-sm sm:prose lg:prose-lg xl:prose-2xl mx-auto focus:outline-none",
+        },
       },
     });
   });
@@ -25,16 +36,23 @@
 </script>
 
 {#if editor}
-  <button on:click={() => editor.chain().focus().setParagraph().run()}>
-    H1
-  </button>
+  <div class="flex gap-4">
+    <button
+      on:click={() => editor.chain().focus().toggleHeading({ level: 1 }).run()}
+      class={editor.isActive("heading", { level: 1 }) ? "is-active" : ""}
+    >
+      h1
+    </button>
 
-  <button
-    on:click={() => editor.chain().focus().setParagraph().run()}
-    class:active={editor.isActive("paragraph")}
-  >
-    P
-  </button>
+    <button
+      on:click={() => editor.chain().focus().toggleBold().run()}
+      class:active={editor.isActive("paragraph")}
+    >
+      Bold
+    </button>
+  </div>
 {/if}
 
-<div bind:this={element}></div>
+<div class="shadow-xl rounded-md">
+  <div class=" p-16" bind:this={element}></div>
+</div>
